@@ -1,15 +1,22 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 
 export default function UseMemoComponent() {
   /**
-   * optmise expensive operation
-   * referential equality
+   * memoize the function (useCallback) vs memoize the value (useMemo)
+   * referential equality for objects, arrays or functions
    */
   const [counter, setCounter] = useState(0);
   const [name, setName] = useState("");
   const result = useMemo(() => {
     return factorial(counter);
   }, [counter]);
+
+  const displayName = useCallback(
+    (greeting) => {
+      return greeting + " " + name;
+    },
+    [name]
+  );
 
   function factorial(n) {
     let i = 0;
@@ -42,12 +49,16 @@ export default function UseMemoComponent() {
         onChange={(e) => setName(e.target.value)}
       />
       <hr></hr>
-      <DisplayName name={name} />
+      <DisplayName displayName={displayName} />
     </div>
   );
 }
 
-const DisplayName = React.memo(({ name }) => {
-  console.log("re-rendered");
-  return <p>Name is {name}</p>;
-});
+const DisplayName = ({ displayName }) => {
+  const [value, setValue] = useState("");
+  useEffect(() => {
+    setValue(displayName("Hello"));
+    console.log("re-rendered");
+  }, [displayName]);
+  return <p>Name is {value}</p>;
+};
