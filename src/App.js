@@ -1,10 +1,9 @@
-import { useState } from "react";
-import UseRefComponent from "./components/UseRefComponent";
+import UseMemoComponent from "./components/UseMemoComponent";
 
 function App() {
   return (
     <div className="App">
-      <UseRefComponent />
+      <UseMemoComponent />
     </div>
   );
 }
